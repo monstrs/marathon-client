@@ -1,0 +1,30 @@
+version: "2"
+
+services:
+  ide:
+    image: monstrs/cloud9
+    volumes:
+      - ./:/workspace
+    ports:
+      - "8487:80"
+
+  dev:
+    image: haskell
+    network_mode: host
+    working_dir: /workspace
+    environment:
+      STACK_IN_CONTAINER: 1
+    volumes:
+      - ./:/workspace
+      - ./.stack:/root/.stack
+
+  examples:
+    image: haskell
+    network_mode: host
+    working_dir: /workspace/examples
+    environment:
+      STACK_IN_CONTAINER: 1
+      MARATHON_URL: ${MARATHON_URL}
+    volumes:
+      - ./:/workspace
+      - ./.stack:/root/.stack
